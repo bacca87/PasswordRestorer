@@ -20,6 +20,12 @@ namespace PasswordRestorer
             InitializeComponent();
         }
 
+        private void frmMain_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtUserName.Text = System.Environment.UserName;
+            txtDomain.Text = IPGlobalProperties.GetIPGlobalProperties().DomainName;
+        }
+
         private void cmdRestore_Click(object sender, RoutedEventArgs e)
         {
             using (WaitCursor cursor = new WaitCursor())
@@ -32,8 +38,8 @@ namespace PasswordRestorer
 
                 try
                 {
-                    using (var context = new PrincipalContext(ContextType.Domain, IPGlobalProperties.GetIPGlobalProperties().DomainName))
-                    using (var user = UserPrincipal.FindByIdentity(context, IdentityType.SamAccountName, System.Security.Principal.WindowsIdentity.GetCurrent().Name))
+                    using (var context = new PrincipalContext(ContextType.Domain, txtDomain.Text.Trim()))
+                    using (var user = UserPrincipal.FindByIdentity(context, txtUserName.Text.Trim()))
                     {
                         for (int i = 0; i < historySize; i++)
                         {
