@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PasswordRestorer"
         mc:Ignorable="d"
-        Name="frmMain" Title="Password Restorer 1.0" Height="225" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="frmMain_Loaded">
+        Name="frmMain" Title="Password Restorer 1.1" Height="225" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="frmMain_Loaded">
     <Grid Height="Auto" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
