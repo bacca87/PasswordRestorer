@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
+using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Windows;
@@ -28,6 +29,24 @@ namespace PasswordRestorer
 
         private void cmdRestore_Click(object sender, RoutedEventArgs e)
         {
+            if (txtCurrentPsw.Text == string.Empty)
+            {
+                MessageBox.Show("The current password cannot be empty! Operation cancelled.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (txtPswToRestore.Text == string.Empty)
+            {
+                MessageBox.Show("The password to restore cannot be empty! Operation cancelled.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (txtCurrentPsw.Text == txtPswToRestore.Text)
+            {
+                MessageBox.Show("The password to restore must be different from the current one! Operation cancelled.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             using (WaitCursor cursor = new WaitCursor())
             {
                 string currentPassword = txtCurrentPsw.Text;
@@ -37,9 +56,12 @@ namespace PasswordRestorer
                 passwordCache.Add(currentPassword);
 
                 try
-                {
-                    using (var context = new PrincipalContext(ContextType.Domain, txtDomain.Text.Trim()))
-                    using (var user = UserPrincipal.FindByIdentity(context, txtUserName.Text.Trim()))
+                {   
+                    ContextType contextType = txtDomain.Text != string.Empty ? ContextType.Domain : ContextType.Machine;
+                    string contextName = contextType == ContextType.Domain ? txtDomain.Text.Trim() : IPGlobalProperties.GetIPGlobalProperties().HostName;
+
+                    using (var context = new PrincipalContext(contextType, contextName))
+                    using (var user = UserPrincipal.FindByIdentity(context, txtUserName.Text))
                     {
                         for (int i = 0; i < historySize; i++)
                         {
@@ -74,7 +96,8 @@ namespace PasswordRestorer
     d) a non-alphanumeric character (for example:!, $, #,%).";
 
                     MessageBox.Show($"\n\nException: {ex.Message}" + "\n\n" + rules, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    MessageBox.Show($"Current Password: {currentPassword}", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show($"Current Password: {currentPassword}\nCheck the \"error.log\" file for copy/paste.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    File.AppendAllText(@"Error.log", $"[{DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}] Exception: {ex.Message} Current Password: {currentPassword}" + Environment.NewLine);
                 }
             }
         }
