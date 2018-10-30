@@ -85,17 +85,7 @@ namespace PasswordRestorer
                 }
                 catch (Exception ex)
                 {
-                    string rules = $@"The password, to be accepted, must comply with the following rules:
-1. it must have at least eight characters.
-2. it must be different from the {txtHistorySize.Text} previously used passwords.
-3. it must not contain more than two consecutive username characters.
-4. it must contain at least three of the following categories:
-    a) a minuscule character (a ... z).
-    b) an uppercase character (A ... Z).
-    c) a number (1 ... 0).
-    d) a non-alphanumeric character (for example:!, $, #,%).";
-
-                    MessageBox.Show($"\n\nException: {ex.Message}" + "\n\n" + rules, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"\n\nException: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     MessageBox.Show($"Current Password: {currentPassword}\nCheck the \"error.log\" file for copy/paste.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                     File.AppendAllText(@"Error.log", $"[{DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}] Exception: {ex.Message} Current Password: {currentPassword}" + Environment.NewLine);
                 }
@@ -106,6 +96,21 @@ namespace PasswordRestorer
         {
             if (!char.IsDigit(e.Text, e.Text.Length - 1))
                 e.Handled = true;
+        }
+        
+        private void cmdHelp_Click(object sender, RoutedEventArgs e)
+        {
+            string rules = $@"The password, to be accepted, must comply with the following rules:
+1. it must have at least eight characters.
+2. it must be different from the {txtHistorySize.Text} previously used passwords.
+3. it must not contain more than two consecutive username characters.
+4. it must contain at least three of the following categories:
+    a) a minuscule character (a ... z).
+    b) an uppercase character (A ... Z).
+    c) a number (1 ... 0).
+    d) a non-alphanumeric character (for example:!, $, #,%).";
+
+            MessageBox.Show(rules, "E80 Password Rules", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

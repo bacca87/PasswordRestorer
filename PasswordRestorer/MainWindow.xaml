@@ -25,11 +25,18 @@
         <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" HorizontalAlignment="Right">Current Password:</TextBlock>
         <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" HorizontalAlignment="Right">Password to Restore:</TextBlock>
         <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" HorizontalAlignment="Right">History Size:</TextBlock>
+
+        <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Name="txtUserName"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Name="txtDomain"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Name="txtCurrentPsw"/>
+
+        <StackPanel Grid.Row="3" Grid.Column="1" Margin="5" Orientation="Horizontal">
+            <TextBox Name="txtPswToRestore" Width="277"/>
+            <Button Name="cmdHelp" Height="18" Click="cmdHelp_Click">
+                <TextBlock Margin="2" VerticalAlignment="Center" Text="?"/>
+            </Button>
+        </StackPanel>
         
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Name="txtUserName"></TextBox>
-        <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Name="txtDomain"></TextBox>
-        <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Name="txtCurrentPsw"></TextBox>
-        <TextBox Grid.Row="3" Grid.Column="1" Margin="5" Name="txtPswToRestore"></TextBox>
         <TextBox Grid.Row="4" Grid.Column="1" Margin="5" Name="txtHistorySize" PreviewTextInput="txtHistorySize_PreviewTextInput">4</TextBox>
         
         <Button Grid.Row="5" Grid.Column="1" Margin="5" Name="cmdRestore" Click="cmdRestore_Click">Restore Password</Button>
