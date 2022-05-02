@@ -50,6 +50,7 @@ namespace PasswordRestorer
             using (WaitCursor cursor = new WaitCursor())
             {
                 string currentPassword = txtCurrentPsw.Text;
+                string newPassword = string.Empty;
                 int historySize = 0;
                 int.TryParse(txtHistorySize.Text, out historySize);
                 List<string> passwordCache = new List<string>();
@@ -66,11 +67,11 @@ namespace PasswordRestorer
                         for (int i = 0; i < historySize; i++)
                         {
                             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuwxyz0123456789|!£$%&/()=?^'[]1+*@°#-_";
-                            string newPassword;
+                            
 
                             do
                             {
-                                newPassword = new string(Enumerable.Repeat(chars, 10).Select(s => s[random.Next(s.Length)]).ToArray());
+                                newPassword = new string(Enumerable.Repeat(chars, 16).Select(s => s[random.Next(s.Length)]).ToArray());
                             }
                             while (passwordCache.Contains(newPassword));
 
@@ -85,9 +86,9 @@ namespace PasswordRestorer
                 }
                 catch (Exception ex)
                 {
+                    File.AppendAllText(@"Error.log", $"[{DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}] Exception: {ex.Message} Current Password: {currentPassword}, NewPassword: {newPassword}" + Environment.NewLine);
                     MessageBox.Show($"\n\nException: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     MessageBox.Show($"Current Password: {currentPassword}\nCheck the \"error.log\" file for copy/paste.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                    File.AppendAllText(@"Error.log", $"[{DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}] Exception: {ex.Message} Current Password: {currentPassword}" + Environment.NewLine);
                 }
             }
         }
